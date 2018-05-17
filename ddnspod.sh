@@ -1,29 +1,28 @@
 #!/bin/bash
-###   ddnspod 0.2
 ###   A simple DDNS script for dnspod
 ###   https://github.com/liyiwu/ddnspod
 
 ##  config
-user_id=''
-login_token=''
+user_id='12345'
+login_token='0123456789abcdef'
 domain='www.domain.com'
 ###   end
 
-agent="ddnspod/0.1(eric@jiangda.info)"
-domaindata="login_token=${user_id},${login_token}&format=json&domain=${domain#*.}&sub_domain=${domain%%.*}"
-returnjson=`curl -s -A ${agent} -X POST https://dnsapi.cn/Record.List -d "${domaindata}"`
+agent="ddnspod/0.4 (eric@jiangda.info)"
+postdata="login_token=${user_id},${login_token}&format=json&domain=${domain#*.}&sub_domain=${domain%%.*}"
+returnjson=`curl -s -A ${agent} -X POST https://dnsapi.cn/Record.List -d "${postdata}"`
 returncode=${returnjson#*code\":\"}
 if [ ${returncode%%\"*} != '1' ]
 then
-    echo "Failed to get records for ${domain}"
+    echo "Failed to get the record for ${domain}"
     exit
 fi
-recordjson=${returnjson#*records\":[}
-record_id=${recordjson#*id\":\"}
-record_line_id=${recordjson#*line_id\":\"}
-value=${recordjson#*value\":\"}
+returnjson=${returnjson#*records\":[}
+record_id=${returnjson#*id\":\"}
+record_line_id=${returnjson#*line_id\":\"}
+value=${returnjson#*value\":\"}
 last_ip=${value%%\"*}
-postdata="${domaindata}&record_line_id=111${record_line_id%%\"*}&record_id=${record_id%%\"*}"
+postdata="${postdata}&record_line_id=${record_line_id%%\"*}&record_id=${record_id%%\"*}"
 while :
 do
     current_ip=`curl -s ip.cn | grep -Eo "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
