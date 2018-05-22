@@ -16,4 +16,4 @@
     Error reading ca cert file /etc/ssl/certs/ca-certificates.crt - mbedTLS:
 
 我的解决方案是将debian上的 /etc/ssl/certs  整个复制到路由器上,
-也可以在路由器上安装ca-certificates应用包。
+也可以在路由器上安装 ca-bundle 应用包。
