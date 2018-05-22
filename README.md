@@ -13,9 +13,9 @@
 
 此脚本适用大多数Linux环境。
 
-在openwrt路由器上需要安装curl包。由于缺少证书，会报错：
+在 openwrt 路由器上需要安装 curl 包。由于缺少证书，会报错：
 
     Error reading ca cert file /etc/ssl/certs/ca-certificates.crt - mbedTLS:
 
-我的解决方案是将debian上的 /etc/ssl/certs  整个复制到路由器上,
+我的解决方案是将 debian 上的 /etc/ssl/certs 整个复制到路由器上,
 也可以在路由器上安装 ca-bundle 应用包。
