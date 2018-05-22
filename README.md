@@ -11,7 +11,7 @@
 
     sh /path/ddnspod.sh &
 
-此脚本适用大多数Linux环境。
+此脚本适用大多数 Linux 环境。
 
 在 openwrt 路由器上需要安装 curl 包。由于缺少证书，会报错：
 
