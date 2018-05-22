@@ -8,7 +8,9 @@
     domain='www.domain.com'
 
 脚本放到后台运行，每5分钟会检查一下外网IP，如果与缓存中的不一致，就会更新记录。
+
     sh /path/ddnspod.sh &
+
 此脚本适用大多数Linux环境。
 
 在openwrt路由器上需要安装curl包。由于缺少证书，会报错：
