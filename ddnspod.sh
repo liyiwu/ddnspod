@@ -8,7 +8,7 @@ login_token='0123456789abcdef'
 domain='www.domain.com'
 ###   end
 
-agent="ddnspod/0.4 (eric@jiangda.info)"
+agent="ddnspod/0.4(eric@jiangda.info)"
 postdata="login_token=${user_id},${login_token}&format=json&domain=${domain#*.}&sub_domain=${domain%%.*}"
 returnjson=`curl -s -A ${agent} -X POST https://dnsapi.cn/Record.List -d "${postdata}"`
 returncode=${returnjson#*code\":\"}
