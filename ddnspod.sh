@@ -8,6 +8,10 @@ login_token='0123456789abcdef'
 domain='www.domain.com'
 ###   end
 
+# wait internet and sync time
+sleep 2m;
+ntpclient -c 1 -h 0.openwrt.pool.ntp.org > /dev/null
+
 echo "Start at $(date)"
 agent="ddnspod/0.7(eric@jiangda.info)"
 postdata="login_token=${user_id},${login_token}&format=json&domain=${domain#*.}&sub_domain=${domain%%.*}"
@@ -15,7 +19,8 @@ postdata="login_token=${user_id},${login_token}&format=json&domain=${domain#*.}&
 while :
 do
     #echo "curl -s -A ${agent} -X POST https://dnsapi.cn/Record.List -d '${postdata}'"
-    returnjson=$(curl -k -s -A ${agent} -X POST https://dnsapi.cn/Record.List -d "${postdata}")
+    #returnjson=$(curl -k -s -A ${agent} -X POST https://dnsapi.cn/Record.List -d "${postdata}")
+    returnjson=$(wget --post-data="${postdata}" https://dnsapi.cn/Record.List -nv -O -)
     returncode=${returnjson#*code\":\"}
     if [ ${returncode%%\"*} == '1' ]
     then
@@ -46,15 +51,17 @@ do
         echo "WAN IP is ${current_ip}"
         echo "DNS IP is ${last_ip}"
 	    #echo "curl -k -s -A ${agent} -X POST https://dnsapi.cn/Record.Ddns -d '${postdata}'"
-        returnjson=`curl -k -s -A ${agent} -X POST https://dnsapi.cn/Record.Ddns -d "${postdata}"`
+        #returnjson=`curl -k -s -A ${agent} -X POST https://dnsapi.cn/Record.Ddns -d "${postdata}"`
+        returnjson=`wget --post-data="${postdata}" https://dnsapi.cn/Record.Ddns -nv -O -`
         returncode=${returnjson#*code\":\"}
-        echo "update code is ${returncode}"
+        #echo "update code is ${returncode}"
         if [ ${returncode%%\"*} = '1' ]
         then
             last_ip=${current_ip}
-            echo "Update successful"
+            date
+            echo "New IP is ${last_ip}, Update successful"
         fi
         echo " "
     fi
-    sleep 3m
+    sleep 5m
 done
